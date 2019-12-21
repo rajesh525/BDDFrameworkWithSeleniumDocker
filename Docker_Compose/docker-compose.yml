@@ -1,0 +1,44 @@
+version: "3"
+services:
+
+  seleniumhub:
+    image: selenium/hub
+    ports:
+      - 4444:4444
+      - 5900:5900
+    environment:
+      GRID_MAX_SESSION: 16
+      GRID_BROWSER_TIMEOUT: 1600
+      GRID_TIMEOUT: 3000
+
+  firefoxnode:
+    image: selenium/node-firefox-debug
+    ports:
+      - 4577:4444
+      - 5901:5900
+    depends_on:
+      - seleniumhub
+    environment:
+      HUB_PORT_4444_TCP_ADDR: seleniumhub
+      HUB_PORT_4444_TCP_PORT: 4444
+      NODE_MAX_SESSION: 4
+      NODE_MAX_INSTANCES: 4
+    links:
+      - seleniumhub:hub
+  
+  chromenode:
+    image: selenium/node-chrome-debug
+    ports:
+      - 4578:4444
+      - 5902:5900
+    depends_on:
+      - seleniumhub
+    environment:
+      HUB_PORT_4444_TCP_ADDR: seleniumhub
+      HUB_PORT_4444_TCP_PORT: 4444
+      NODE_MAX_SESSION: 4
+      NODE_MAX_INSTANCES: 4
+    links:
+      - seleniumhub:hub
+
+
