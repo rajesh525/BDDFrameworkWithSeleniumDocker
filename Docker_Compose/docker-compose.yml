@@ -29,6 +29,7 @@ services:
   chromenode:
     image: selenium/node-chrome-debug
     ports:
+      - 4578:4444
       - 5902:5900
     depends_on:
       - seleniumhub
